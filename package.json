@@ -1,55 +1,65 @@
 {
-  "name": "fhir-questionnaire-render-react",
-  "description": "Rendering engine for FHIR questionnaires using react and FHIRFormJS",
-  "version": "4.0.0",
-  "author": "Bell Eapen",
-  "private": true,
-  "dependencies": {
-    "@rjsf/core": "^4.1.1",
-    "@testing-library/jest-dom": "^5.16.4",
-    "@testing-library/react": "^12.1.5",
-    "@testing-library/user-event": "^13.4.1",
-    "axios": "^0.27.2",
-    "fhirformjs": "^0.9.3",
-    "jsoneditor": "^9.7.4",
-    "jsoneditor-react": "^3.1.2",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
-    "react-scripts": "5.0.1"
-  },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
-  },
-  "eslintConfig": {
-    "extends": "react-app"
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  },
-  "jest": {
-    "transformIgnorePatterns": [
-      "node_modules/(?!(jsoneditor-react/))"
-    ],
-    "moduleNameMapper": {
-      "\\.css$": "identity-obj-proxy"
+    "name": "fhir-questionnaire-render-react",
+    "description": "Rendering engine for FHIR questionnaires using react and FHIRFormJS",
+    "version": "4.0.0",
+    "author": "Bell Eapen",
+    "private": true,
+    "dependencies": {
+        "@rjsf/core": "^4.1.1",
+        "@testing-library/jest-dom": "^5.16.4",
+        "@testing-library/react": "^12.1.5",
+        "@testing-library/user-event": "^13.4.1",
+        "axios": "^0.27.2",
+        "fhirformjs": "^0.9.3",
+        "jsoneditor": "^9.7.4",
+        "jsoneditor-react": "^3.1.2",
+        "react": "^16.14.0",
+        "react-dom": "^16.14.0",
+        "react-scripts": "5.0.1"
+    },
+    "scripts": {
+        "start": "react-app-rewired start",
+        "build": "react-app-rewired build",
+        "test": "react-app-rewired test",
+        "eject": "react-scripts eject"
+    },
+    "eslintConfig": {
+        "extends": "react-app"
+    },
+    "browserslist": {
+        "production": [
+            ">0.2%",
+            "not dead",
+            "not op_mini all"
+        ],
+        "development": [
+            "last 1 chrome version",
+            "last 1 firefox version",
+            "last 1 safari version"
+        ]
+    },
+    "jest": {
+        "transformIgnorePatterns": [
+            "node_modules/(?!(jsoneditor-react/))"
+        ],
+        "moduleNameMapper": {
+            "\\.css$": "identity-obj-proxy"
+        }
+    },
+    "devDependencies": {
+        "assert": "^2.0.0",
+        "buffer": "^6.0.3",
+        "crypto-browserify": "^3.12.0",
+        "enzyme": "^3.11.0",
+        "enzyme-adapter-react-16": "^1.15.6",
+        "https-browserify": "^1.0.0",
+        "identity-obj-proxy": "^3.0.0",
+        "os-browserify": "^0.3.0",
+        "process": "^0.11.10",
+        "react-app-rewired": "^2.2.1",
+        "react-test-renderer": "^18.1.0",
+        "stream-browserify": "^3.0.0",
+        "stream-http": "^3.2.0",
+        "url": "^0.11.0"
     }
-  },
-  "devDependencies": {
-    "enzyme": "^3.11.0",
-    "enzyme-adapter-react-16": "^1.15.6",
-    "identity-obj-proxy": "^3.0.0",
-    "react-test-renderer": "^18.1.0"
-  }
 }
