@@ -14,6 +14,7 @@ import { useEffect } from "react";
 import TabNavItem from "./TabNavItem";
 import TabContent from './NabContent';
 
+
 function App() {
     const [schemaState, setData] = useState(TestQuestionnaire1);
 
@@ -107,6 +108,9 @@ function App() {
         // console.log(data);
 
         // Once the data is received and checked for succession, it should be uploaded to the fhir server
+
+        // pdfMake.vfs =         
+
     }
 
     // return (
