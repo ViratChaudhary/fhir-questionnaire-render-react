@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import Form from "@rjsf/core";
 // import axios from 'axios';
 import { FhirJsonForm, FhirJsonResp } from 'fhirformjs'
-import { TestQuestionnaire1 } from './testQuestionnaire1';
+import { intialVisitQuestionnaire } from './questionnaires/intialVisitQuestionnaire';
+import { subsequentVisitQuestionnaire } from './questionnaires/subsequentVisitQuestionnaire';
 import { JsonEditor as Editor } from 'jsoneditor-react';
 import 'jsoneditor-react/es/editor.min.css';
 import logo from './logo.svg';
@@ -16,10 +17,9 @@ import TabContent from './TabContent';
 
 
 function App() {
-    const [schemaState, setData] = useState(TestQuestionnaire1);
+    const [schemaState, setData] = useState(intialVisitQuestionnaire);
     const [intialResponseData, setInitialResponseData] = useState({});
 
-    // New
     const [activeTab, setActiveTab] = useState("initial_visit_tab");
     const [subsequentTabs, setSubsequentTabs] = useState([
         {
@@ -52,18 +52,21 @@ function App() {
     };
 
     function handleSubmit(data, tabId) {
-        const responseData = FhirJsonResp(FhirJsonForm(schemaState).model, data, FhirJsonForm(schemaState).schema);
-        console.log(JSON.stringify(responseData));
-
-        // update the response if the submitted tab is the initial tab
         if (tabId === initialTab.id) {
-            setInitialResponseData(data);
-        }
+            const responseData = FhirJsonResp(FhirJsonForm(intialVisitQuestionnaire).model, data, FhirJsonForm(intialVisitQuestionnaire).schema);
+            console.log(JSON.stringify(responseData));
 
-        // Sets the response data for the subsequent tab from which you submitted
-        for (var i = 0; i < subsequentTabs.length; i++) {
-            if (subsequentTabs[i].id === tabId) {
-                subsequentTabs[i].responseData = data;
+            // update the response if the submitted tab is the initial tab
+            setInitialResponseData(data);
+        } else {
+            const responseData = FhirJsonResp(FhirJsonForm(subsequentVisitQuestionnaire).model, data, FhirJsonForm(subsequentVisitQuestionnaire).schema);
+            console.log(JSON.stringify(responseData));
+
+            // Sets the response data for the subsequent tab from which you submitted
+            for (var i = 0; i < subsequentTabs.length; i++) {
+                if (subsequentTabs[i].id === tabId) {
+                    subsequentTabs[i].responseData = data;
+                }
             }
         }
     }
@@ -109,8 +112,8 @@ function App() {
             <div className="outlet">
                 <TabContent id={initialTab.id} activeTab={activeTab}>
                     {initialTab.id}
-                    <Form schema={FhirJsonForm(schemaState).schema}
-                        uiSchema={FhirJsonForm(schemaState).uiSchema}
+                    <Form schema={FhirJsonForm(intialVisitQuestionnaire).schema}
+                        uiSchema={FhirJsonForm(intialVisitQuestionnaire).uiSchema}
                         formData={intialResponseData}
                         onSubmit={e => handleSubmit(e.formData, initialTab.id)}
                     />
@@ -119,8 +122,8 @@ function App() {
                 {subsequentTabs.map((tab) => (
                     <TabContent key={tab.id} id={tab.id} activeTab={activeTab}>
                         {tab.id}
-                        <Form schema={FhirJsonForm(schemaState).schema}
-                            uiSchema={FhirJsonForm(schemaState).uiSchema}
+                        <Form schema={FhirJsonForm(subsequentVisitQuestionnaire).schema}
+                            uiSchema={FhirJsonForm(subsequentVisitQuestionnaire).uiSchema}
                             formData={tab.responseData}
                             onSubmit={e => handleSubmit(e.formData, tab.id)}
                         />
