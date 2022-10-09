@@ -12,12 +12,12 @@ import { oauth2 as SMART } from 'fhirclient';
 // New
 import { nanoid } from "nanoid";
 import TabNavItem from "./TabNavItem";
-import TabContent from './NabContent';
+import TabContent from './TabContent';
 
 
 function App() {
     const [schemaState, setData] = useState(TestQuestionnaire1);
-    const [response, setResponse] = useState({});
+    const [intialResponseData, setInitialResponseData] = useState({});
 
     // New
     const [activeTab, setActiveTab] = useState("initial_visit_tab");
@@ -25,6 +25,7 @@ function App() {
         {
             id: nanoid(),
             title: "Subsequent Visit",
+            responseData: {}
         },
     ]);
 
@@ -39,6 +40,7 @@ function App() {
             {
                 id: nanoid(),
                 title: "Subsequent Visit",
+                responseData: {}
             },
         ]);
     };
@@ -49,15 +51,21 @@ function App() {
         );
     };
 
-    let formData = {}
-    let respData = {}
-
-    function handleSubmit(data) {
-        // console.log("Submitting");
+    function handleSubmit(data, tabId) {
         const responseData = FhirJsonResp(FhirJsonForm(schemaState).model, data, FhirJsonForm(schemaState).schema);
         console.log(JSON.stringify(responseData));
 
-        setResponse(data);
+        // update the response if the submitted tab is the initial tab
+        if (tabId === initialTab.id) {
+            setInitialResponseData(data);
+        }
+
+        // Sets the response data for the subsequent tab from which you submitted
+        for (var i = 0; i < subsequentTabs.length; i++) {
+            if (subsequentTabs[i].id === tabId) {
+                subsequentTabs[i].responseData = data;
+            }
+        }
     }
 
     function handleChange(data) {
@@ -72,9 +80,6 @@ function App() {
         // console.log(data);
 
         // Once the data is received and checked for succession, it should be uploaded to the fhir server
-
-        // pdfMake.vfs =         
-
     }
 
     return (
@@ -106,19 +111,18 @@ function App() {
                     {initialTab.id}
                     <Form schema={FhirJsonForm(schemaState).schema}
                         uiSchema={FhirJsonForm(schemaState).uiSchema}
-                        formData={response}
-                        onSubmit={e => handleSubmit(e.formData)}
+                        formData={intialResponseData}
+                        onSubmit={e => handleSubmit(e.formData, initialTab.id)}
                     />
                 </TabContent>
 
                 {subsequentTabs.map((tab) => (
                     <TabContent key={tab.id} id={tab.id} activeTab={activeTab}>
                         {tab.id}
-                        {/* <div id={`questionnaire_${tab.id}`}></div> */}
                         <Form schema={FhirJsonForm(schemaState).schema}
                             uiSchema={FhirJsonForm(schemaState).uiSchema}
-                            formData={response}
-                            onSubmit={e => handleSubmit(e.formData)}
+                            formData={tab.responseData}
+                            onSubmit={e => handleSubmit(e.formData, tab.id)}
                         />
                     </TabContent>
                 ))}
