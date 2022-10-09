@@ -10,6 +10,7 @@
         "@testing-library/react": "^12.1.5",
         "@testing-library/user-event": "^13.4.1",
         "axios": "^0.27.2",
+        "fhirclient": "^2.5.2",
         "fhirformjs": "^0.9.3",
         "jsoneditor": "^9.7.4",
         "jsoneditor-react": "^3.1.2",
