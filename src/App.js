@@ -83,21 +83,21 @@ function App() {
         setData(data)  // You may like to save the edited form to your FHIR server
     }
 
-    useEffect(() => {
-        <Form schema={FhirJsonForm(schemaState).schema}
-            uiSchema={FhirJsonForm(schemaState).uiSchema}
-            formData={formData}
-            onSubmit={e => handleSubmit(e.formData)}
-        />
+    // useEffect(() => {
+    //     <Form schema={FhirJsonForm(schemaState).schema}
+    //         uiSchema={FhirJsonForm(schemaState).uiSchema}
+    //         formData={formData}
+    //         onSubmit={e => handleSubmit(e.formData)}
+    //     />
 
-        subsequentTabs.forEach((tab, i) => {
-            <Form schema={FhirJsonForm(schemaState).schema}
-                uiSchema={FhirJsonForm(schemaState).uiSchema}
-                formData={formData}
-                onSubmit={e => handleSubmit(e.formData)}
-            />
-        })
-    }, [subsequentTabs, activeTab]);
+    //     subsequentTabs.forEach((tab, i) => {
+    //         <Form schema={FhirJsonForm(schemaState).schema}
+    //             uiSchema={FhirJsonForm(schemaState).uiSchema}
+    //             formData={formData}
+    //             onSubmit={e => handleSubmit(e.formData)}
+    //         />
+    //     })
+    // }, [subsequentTabs, activeTab]);
 
     const handleSaveButton = (id) => {
 
@@ -155,14 +155,24 @@ function App() {
             <div className="outlet">
                 <TabContent id={initialTab.id} activeTab={activeTab}>
                     {initialTab.id}
-                    <div id="myFormContainer"></div>
+                    <Form schema={FhirJsonForm(schemaState).schema}
+                        uiSchema={FhirJsonForm(schemaState).uiSchema}
+                        formData={formData}
+                        onSubmit={e => handleSubmit(e.formData)}
+                    />
                 </TabContent>
 
                 {subsequentTabs.map((tab) => (
                     <TabContent key={tab.id} id={tab.id} activeTab={activeTab}>
                         {tab.id}
-                        <div id={`questionnaire_${tab.id}`}></div>
+                        {/* <div id={`questionnaire_${tab.id}`}></div> */}
+                        <Form schema={FhirJsonForm(schemaState).schema}
+                            uiSchema={FhirJsonForm(schemaState).uiSchema}
+                            formData={formData}
+                            onSubmit={e => handleSubmit(e.formData)}
+                        />
                     </TabContent>
+
                 ))}
             </div>
         </div>
