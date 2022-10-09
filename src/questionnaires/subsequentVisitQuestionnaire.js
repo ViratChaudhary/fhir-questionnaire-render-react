@@ -4,7 +4,7 @@ export const subsequentVisitQuestionnaire = {
     text: {
         status: 'generated',
         div:
-            '<div xmlns="http://www.w3.org/1999/xhtml">\n      <pre>Lifelines Questionnaire 1 part 1\n  1. Do you have allergies?\n  2. General Questions:\n    2.a) What is your gender?\n    2.b) What is your date of birth?\n'
+            '<div xmlns="http://www.w3.org/1999/xhtml">\n      <pre>Lifelines Questionnaire 1 part 1\n  1. Do you have allergies?\n  2. General Questions:\n    2.a) What is your gender?\n    2.b) What is your date of birth?\n    2.c) What is your country of birth?\n    2.d) What is your marital status?\n    3. Intoxications:\n      3.a) Do you smoke?\n      3.b) Do you drink alcohol?</pre>\n    </div>',
     },
     url: 'http://hl7.org/fhir/Questionnaire/f201',
     status: 'active',
@@ -30,13 +30,40 @@ export const subsequentVisitQuestionnaire = {
             item: [
                 {
                     linkId: '2.1',
+                    text: 'What is your date of birth?',
+                    type: 'date',
+                },
+                {
+                    linkId: '2.2',
                     text: 'What is your gender?',
                     type: 'string',
                 },
                 {
-                    linkId: '2.2',
-                    text: 'What is your date of birth?',
-                    type: 'date',
+                    linkId: '2.3',
+                    text: 'What is your marital status?',
+                    type: 'string',
+                },
+                {
+                    linkId: '2.4',
+                    text: 'What is your country of birth?',
+                    type: 'string',
+                },
+            ],
+        },
+        {
+            linkId: '3',
+            text: 'Intoxications',
+            type: 'group',
+            item: [
+                {
+                    linkId: '3.1',
+                    text: 'Do you drink alchohol?',
+                    type: 'boolean',
+                },
+                {
+                    linkId: '3.2',
+                    text: 'Do you smoke?',
+                    type: 'boolean',
                 },
             ],
         },

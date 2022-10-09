@@ -52,6 +52,9 @@ function App() {
     };
 
     function handleSubmit(data, tabId) {
+        // postQuestionnaireToFhir(intialVisitQuestionnaire);
+        // postQuestionnaireToFhir(subsequentVisitQuestionnaire);
+
         if (tabId === initialTab.id) {
             const responseData = FhirJsonResp(FhirJsonForm(intialVisitQuestionnaire).model, data, FhirJsonForm(intialVisitQuestionnaire).schema);
             console.log(JSON.stringify(responseData));
@@ -71,8 +74,17 @@ function App() {
         }
     }
 
-    function handleChange(data) {
-        setData(data)  // You may like to save the edited form to your FHIR server
+    function postQuetionnaireResponseToFhirServer(data) {
+        SMART.ready().then(function (client) {
+            client.update(data)
+                .catch(function (err) {
+                    console.log("An error occured during questionnaire response resource creation" + JSON.stringify(err));
+                })
+                .then(function (response) {
+                    console.log("Questionnaire response was created/updated successfully");
+                    console.log(response);
+                });
+        });
     }
 
     return (
