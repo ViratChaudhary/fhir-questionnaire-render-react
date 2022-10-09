@@ -5,8 +5,7 @@ const TabNavItem = ({
     title,
     activeTab,
     setActiveTab,
-    handleRemoveButton,
-    handleSaveButton
+    handleRemove,
 }) => {
     const handleClick = () => {
         setActiveTab(id);
@@ -17,17 +16,10 @@ const TabNavItem = ({
             <li onClick={handleClick} className={activeTab === id ? "active" : ""}>
                 {title}
             </li>
-            <button
-                onClick={() => {
-                    handleSaveButton(id);
-                }}
-            >
-                Save
-            </button>
             {id !== "initial_visit_tab" ? (
                 <button
                     onClick={() => {
-                        handleRemoveButton(id);
+                        handleRemove(id);
                     }}
                 >
                     Remove

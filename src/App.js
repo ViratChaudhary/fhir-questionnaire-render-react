@@ -34,7 +34,7 @@ function App() {
         title: "Initial Visit",
     };
 
-    const handlePlusButton = () => {
+    const handleNewTab = () => {
         setSubsequentTabs((prevItems) => [
             ...prevItems,
             {
@@ -45,7 +45,7 @@ function App() {
         ]);
     };
 
-    const handleRemoveButton = (id) => {
+    const handleRemoveTab = (id) => {
         setSubsequentTabs((prevItems) =>
             prevItems.filter((item) => item.id !== id)
         );
@@ -75,16 +75,6 @@ function App() {
         setData(data)  // You may like to save the edited form to your FHIR server
     }
 
-    const handleSaveButton = (id) => {
-
-        // Here we should get the data for the given visit from which the save button was called
-
-        // const data = LForms.Util.getFormFHIRData('QuestionnaireResponse', 'R4');
-        // console.log(data);
-
-        // Once the data is received and checked for succession, it should be uploaded to the fhir server
-    }
-
     return (
         <div className="Tabs">
             <ul className="nav">
@@ -93,7 +83,6 @@ function App() {
                     title={initialTab.title}
                     activeTab={activeTab}
                     setActiveTab={setActiveTab}
-                    handleSaveButton={handleSaveButton}
                 />
                 {subsequentTabs.map((tab) => (
                     <TabNavItem
@@ -102,11 +91,10 @@ function App() {
                         title={tab.title}
                         activeTab={activeTab}
                         setActiveTab={setActiveTab}
-                        handleRemoveButton={handleRemoveButton}
-                        handleSaveButton={handleSaveButton}
+                        handleRemove={handleRemoveTab}
                     />
                 ))}
-                <li onClick={handlePlusButton}>+</li>
+                <li onClick={handleNewTab}>+</li>
             </ul>
 
             <div className="outlet">
