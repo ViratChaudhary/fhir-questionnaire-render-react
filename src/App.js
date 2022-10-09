@@ -7,16 +7,17 @@ import { JsonEditor as Editor } from 'jsoneditor-react';
 import 'jsoneditor-react/es/editor.min.css';
 import logo from './logo.svg';
 import './App.css';
+import { oauth2 as SMART } from 'fhirclient';
 
 // New
 import { nanoid } from "nanoid";
-import { useEffect } from "react";
 import TabNavItem from "./TabNavItem";
 import TabContent from './NabContent';
 
 
 function App() {
     const [schemaState, setData] = useState(TestQuestionnaire1);
+    const [response, setResponse] = useState({});
 
     // New
     const [activeTab, setActiveTab] = useState("initial_visit_tab");
@@ -48,26 +49,6 @@ function App() {
         );
     };
 
-    // You may be fetching data from an endpoint as below
-
-    /*
-    useEffect(() => { 
-      async function fetchData() {
-        // You can await here
-        const result = await axios.get(
-          'https://www.hl7.org/fhir/questionnaire-example-f201-lifelines.json',
-        );
-        // ...
-        setData(JSON.parse(FhirJsonForm(result.data)));
-        console.log(schema)
-      }
-      fetchData();
-    
-      // const schema = JSON.parse(FhirJsonForm(data))
-  
-    }, [schema]);
-    */
-
     let formData = {}
     let respData = {}
 
@@ -76,29 +57,12 @@ function App() {
         const responseData = FhirJsonResp(FhirJsonForm(schemaState).model, data, FhirJsonForm(schemaState).schema);
         console.log(JSON.stringify(responseData));
 
-        // respData = FhirJsonResp(FhirJsonForm(schemaState).model, data)
-        // console.log(respData)
+        setResponse(data);
     }
 
     function handleChange(data) {
         setData(data)  // You may like to save the edited form to your FHIR server
     }
-
-    // useEffect(() => {
-    //     <Form schema={FhirJsonForm(schemaState).schema}
-    //         uiSchema={FhirJsonForm(schemaState).uiSchema}
-    //         formData={formData}
-    //         onSubmit={e => handleSubmit(e.formData)}
-    //     />
-
-    //     subsequentTabs.forEach((tab, i) => {
-    //         <Form schema={FhirJsonForm(schemaState).schema}
-    //             uiSchema={FhirJsonForm(schemaState).uiSchema}
-    //             formData={formData}
-    //             onSubmit={e => handleSubmit(e.formData)}
-    //         />
-    //     })
-    // }, [subsequentTabs, activeTab]);
 
     const handleSaveButton = (id) => {
 
@@ -112,25 +76,6 @@ function App() {
         // pdfMake.vfs =         
 
     }
-
-    // return (
-    //     <div className="App">
-    //         <header className="App-header">
-    //             {/* <img src={logo} className="App-logo" alt="logo" /> */}
-
-    //             {/* <Form schema={FhirJsonForm(schemaState).schema}
-    //                 uiSchema={FhirJsonForm(schemaState).uiSchema}
-    //                 formData={formData}
-    //                 onSubmit={e => handleSubmit(e.formData)}
-    //             /> */}
-    //             {/* <h2>Edit FHIR Questionnaire below (Change IDs if you duplicate an element)</h2>
-    //             <Editor
-    //                 value={schemaState}
-    //                 onChange={e => handleChange(e)}
-    //             /> */}
-    //         </header>
-    //     </div>
-    // );
 
     return (
         <div className="Tabs">
@@ -161,7 +106,7 @@ function App() {
                     {initialTab.id}
                     <Form schema={FhirJsonForm(schemaState).schema}
                         uiSchema={FhirJsonForm(schemaState).uiSchema}
-                        formData={formData}
+                        formData={response}
                         onSubmit={e => handleSubmit(e.formData)}
                     />
                 </TabContent>
@@ -172,11 +117,10 @@ function App() {
                         {/* <div id={`questionnaire_${tab.id}`}></div> */}
                         <Form schema={FhirJsonForm(schemaState).schema}
                             uiSchema={FhirJsonForm(schemaState).uiSchema}
-                            formData={formData}
+                            formData={response}
                             onSubmit={e => handleSubmit(e.formData)}
                         />
                     </TabContent>
-
                 ))}
             </div>
         </div>
