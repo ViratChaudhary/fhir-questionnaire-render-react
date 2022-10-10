@@ -1,6 +1,5 @@
 export const intialVisitQuestionnaire = {
     resourceType: 'Questionnaire',
-    id: 'f201',
     text: {
         status: 'generated',
         div:

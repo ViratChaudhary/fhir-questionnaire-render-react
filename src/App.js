@@ -4,17 +4,14 @@ import Form from "@rjsf/core";
 import { FhirJsonForm, FhirJsonResp } from 'fhirformjs'
 import { intialVisitQuestionnaire } from './questionnaires/intialVisitQuestionnaire';
 import { subsequentVisitQuestionnaire } from './questionnaires/subsequentVisitQuestionnaire';
-import { JsonEditor as Editor } from 'jsoneditor-react';
+import { testVisitQuestionnaire } from './questionnaires/testVisitQuestionnaire';
 import 'jsoneditor-react/es/editor.min.css';
-import logo from './logo.svg';
 import './App.css';
 import { oauth2 as SMART } from 'fhirclient';
-
-// New
 import { nanoid } from "nanoid";
 import TabNavItem from "./TabNavItem";
 import TabContent from './TabContent';
-
+import { useEffect } from 'react';
 
 function App() {
     const [schemaState, setData] = useState(intialVisitQuestionnaire);
@@ -34,6 +31,11 @@ function App() {
         title: "Initial Visit",
     };
 
+    useEffect(() => {
+        postQuestionnaireToFhir(intialVisitQuestionnaire); // this will fire only on first render
+        postQuestionnaireToFhir(subsequentVisitQuestionnaire);
+    }, []);
+
     const handleNewTab = () => {
         setSubsequentTabs((prevItems) => [
             ...prevItems,
@@ -52,15 +54,13 @@ function App() {
     };
 
     function handleSubmit(data, tabId) {
-        // postQuestionnaireToFhir(intialVisitQuestionnaire);
-        // postQuestionnaireToFhir(subsequentVisitQuestionnaire);
-
         if (tabId === initialTab.id) {
             const responseData = FhirJsonResp(FhirJsonForm(intialVisitQuestionnaire).model, data, FhirJsonForm(intialVisitQuestionnaire).schema);
             console.log(JSON.stringify(responseData));
 
             // update the response if the submitted tab is the initial tab
             setInitialResponseData(data);
+            postQuestionnaireResponseToFhir(responseData);
         } else {
             const responseData = FhirJsonResp(FhirJsonForm(subsequentVisitQuestionnaire).model, data, FhirJsonForm(subsequentVisitQuestionnaire).schema);
             console.log(JSON.stringify(responseData));
@@ -71,17 +71,31 @@ function App() {
                     subsequentTabs[i].responseData = data;
                 }
             }
+            postQuestionnaireResponseToFhir(responseData);
         }
     }
 
-    function postQuetionnaireResponseToFhirServer(data) {
+    function postQuestionnaireToFhir(data) {
         SMART.ready().then(function (client) {
-            client.update(data)
+            client.create(data)
+                .catch(function (err) {
+                    console.log("An error occured during questionnaire resource creation" + JSON.stringify(err));
+                })
+                .then(function (response) {
+                    console.log("Questionnaire was successfully created successfully");
+                    console.log(response);
+                });
+        });
+    }
+
+    function postQuestionnaireResponseToFhir(data) {
+        SMART.ready().then(function (client) {
+            client.create(data)
                 .catch(function (err) {
                     console.log("An error occured during questionnaire response resource creation" + JSON.stringify(err));
                 })
                 .then(function (response) {
-                    console.log("Questionnaire response was created/updated successfully");
+                    console.log("Questionnaire response was successfully created successfully");
                     console.log(response);
                 });
         });
@@ -111,7 +125,7 @@ function App() {
 
             <div className="outlet">
                 <TabContent id={initialTab.id} activeTab={activeTab}>
-                    {initialTab.id}
+                    {/* {initialTab.id} */}
                     <Form schema={FhirJsonForm(intialVisitQuestionnaire).schema}
                         uiSchema={FhirJsonForm(intialVisitQuestionnaire).uiSchema}
                         formData={intialResponseData}
@@ -121,7 +135,7 @@ function App() {
 
                 {subsequentTabs.map((tab) => (
                     <TabContent key={tab.id} id={tab.id} activeTab={activeTab}>
-                        {tab.id}
+                        {/* {tab.id} */}
                         <Form schema={FhirJsonForm(subsequentVisitQuestionnaire).schema}
                             uiSchema={FhirJsonForm(subsequentVisitQuestionnaire).uiSchema}
                             formData={tab.responseData}
