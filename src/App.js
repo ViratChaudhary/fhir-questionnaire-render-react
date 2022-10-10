@@ -14,7 +14,7 @@ import TabContent from './TabContent';
 import { useEffect } from 'react';
 
 function App() {
-    const [schemaState, setData] = useState(intialVisitQuestionnaire);
+    const [schemaState, setData] = useState(testVisitQuestionnaire);
     const [intialResponseData, setInitialResponseData] = useState({});
 
     const [activeTab, setActiveTab] = useState("initial_visit_tab");
@@ -32,7 +32,7 @@ function App() {
     };
 
     useEffect(() => {
-        postQuestionnaireToFhir(intialVisitQuestionnaire); // this will fire only on first render
+        postQuestionnaireToFhir(testVisitQuestionnaire); // this will fire only on first render
         postQuestionnaireToFhir(subsequentVisitQuestionnaire);
     }, []);
 
@@ -55,7 +55,7 @@ function App() {
 
     function handleSubmit(data, tabId) {
         if (tabId === initialTab.id) {
-            const responseData = FhirJsonResp(FhirJsonForm(intialVisitQuestionnaire).model, data, FhirJsonForm(intialVisitQuestionnaire).schema);
+            const responseData = FhirJsonResp(FhirJsonForm(testVisitQuestionnaire).model, data, FhirJsonForm(testVisitQuestionnaire).schema);
             console.log(JSON.stringify(responseData));
 
             // update the response if the submitted tab is the initial tab
@@ -126,8 +126,8 @@ function App() {
             <div className="outlet">
                 <TabContent id={initialTab.id} activeTab={activeTab}>
                     {/* {initialTab.id} */}
-                    <Form schema={FhirJsonForm(intialVisitQuestionnaire).schema}
-                        uiSchema={FhirJsonForm(intialVisitQuestionnaire).uiSchema}
+                    <Form schema={FhirJsonForm(testVisitQuestionnaire).schema}
+                        uiSchema={FhirJsonForm(testVisitQuestionnaire).uiSchema}
                         formData={intialResponseData}
                         onSubmit={e => handleSubmit(e.formData, initialTab.id)}
                     />
